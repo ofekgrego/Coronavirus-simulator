@@ -3,12 +3,13 @@ from tkinter import *
 import tkinter
 import numpy
 
-numOfPeopleGlob = 100
+numOfPeopleGlob = 1000
 numOfSicks = 5
-timeToSpot = 5
-timeToHeal = 14
 possibleStore = 20
 chanceToSickStore = 40
+chanceToSickTwice = 20
+timeToSpot = 2
+timeToHeal = 14
 deathChance = 0.5
 
 window = Tk()
@@ -34,6 +35,27 @@ arrayOfChance = [None] * numOfPeopleGlob
 arrayOfNowInStore = [None] * numOfPeopleGlob
 arrayOfSick = [1] * numOfSicks + [0] * (numOfPeopleGlob-numOfSicks)
 arrayOfDeath = [False] * numOfPeopleGlob
+arrayOfBeenSick = [False] * numOfPeopleGlob
+arrayOfThird = [False] * numOfPeopleGlob
+
+inputLabel = [Label(text="\n\nNumber Of People:"),Label(text="Sick People At Start:"),Label(text="Chance To Go To Store(%):")
+,Label(text="Chance To Get Sick In Store(%):"),Label(text="Chance To Get Sick Twice(%):"),Label(text="Time To Spot Sickness:")
+,Label(text="Time To Heal:"),Label(text="Chance To Die(%):"),Label(text="Chance To Get Sick Third(T/F):")]
+inputEntry = [Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5)]
+
+for i in range(len(inputLabel)):
+    inputLabel[i].pack(side=tkinter.TOP)
+    inputEntry[i].pack(side=tkinter.TOP)
+
+inputEntry[0].insert("0",numOfPeopleGlob)
+inputEntry[1].insert("0",numOfSicks)
+inputEntry[2].insert("0",possibleStore)
+inputEntry[3].insert("0",chanceToSickStore)
+inputEntry[4].insert("0", chanceToSickTwice)
+inputEntry[5].insert("0",timeToSpot)
+inputEntry[6].insert("0",timeToHeal)
+inputEntry[7].insert("0",deathChance)
+inputEntry[8].insert("0", "F")
 
 def makePeople(numOfPeople):
         global arrayOfPeople, arrayOfObjects,isSickOne
@@ -79,28 +101,28 @@ def refrashScreen():
 
 def refrashData():
     global arrayOfChance
-    sickNumber = 0
-    noSpot = 0
     sickInside = False
     arrayOfChance = [None] * numOfPeopleGlob
-    for i in range(len(arrayOfPeople)): #enterstore
-        if arrayOfNowInStore[i] == True:
-            arrayOfNowInStore[i] = False
-        if arrayOfSick[i] <= timeToSpot:
-            ChanceNumber = random.randint(1,100)
-            Chance = False
-            if ChanceNumber <= possibleStore:
-                Chance = True
-                if arrayOfSick[i] > 0:
-                    sickInside = True
+    for i in range(len(arrayOfPeople)):
+        if arrayOfDeath[i] == False:
+            if arrayOfNowInStore[i] == True:
+                arrayOfNowInStore[i] = False
+
+            if arrayOfSick[i] <= timeToSpot:
+                ChanceNumber = random.randint(1,100)
+                Chance = False
+                if ChanceNumber <= possibleStore:
+                    Chance = True
+                    if arrayOfSick[i] > 0:
+                        sickInside = True
+                else:
+                    Chance = False
             else:
                 Chance = False
-        else:
-            Chance = False
-        arrayOfChance[i] = Chance
+            arrayOfChance[i] = Chance
 
     refrashScreen()
-    for i in range(len(arrayOfSick)): #check of been sick a while
+    for i in range(len(arrayOfSick)):
         if arrayOfDeath[i] == False:
             if arrayOfSick[i] > 0:
                 arrayOfSick[i] += 1
@@ -108,32 +130,67 @@ def refrashData():
                 chanceOfDeath = random.randint(1,1000)
                 if chanceOfDeath <= (deathChance*10):
                     arrayOfDeath[i] = True
-                    print(str(i) + " died")
                 else:
                     arrayOfSick[i] = 0
 
-    if sickInside: #adding sick people
-        for i in range(len(arrayOfNowInStore)):
-            if arrayOfNowInStore[i] == True and arrayOfSick[i] == 0:
-                Chance = random.randint(1, 100)
-                if chanceToSickStore >= Chance:
-                    arrayOfSick[i] = 1
+    if sickInside == True:
+        for j in range(len(arrayOfNowInStore)):
+            if ThirdChance == True:
+                if arrayOfNowInStore[j] == True and arrayOfSick[j] == 0:
+                    Chance = random.randint(1, 100)
+                    if arrayOfBeenSick[j] == False:
+                        if  chanceToSickStore >= Chance:
+                            arrayOfSick[j] = 1
+                            arrayOfBeenSick[j] = True
+                    else:
+                        if  chanceToSickTwice >= Chance:
+                            arrayOfSick[j] = 1
+                            arrayOfThird[j] = True
+            elif arrayOfThird[j] == False:
+                if arrayOfNowInStore[j] == True and arrayOfSick[j] == 0:
+                    Chance = random.randint(1, 100)
+                    if arrayOfBeenSick[j] == False:
+                        if  chanceToSickStore >= Chance:
+                            arrayOfSick[j] = 1
+                            arrayOfBeenSick[j] = True
+                    else:
+                        if  chanceToSickTwice >= Chance:
+                            arrayOfSick[j] = 1
+                            arrayOfThird[j] = True
+
 
 def nextPressed():
     refrashData()
 
 def runPressed():
     global arrayOfObjects,arrayOfPeople,arrayOfChance,arrayOfNowInStore,arrayOfSick,arrayOfDeath
+    global numOfPeopleGlob,numOfSicks,possibleStore,chanceToSickStore
+    global timeToHeal,timeToSpot,ThirdChance,chanceToSickTwice, arrayOfThird,arrayOfBeenSick
+
     w.delete("all")
     w.create_rectangle(450, 450, 550, 550)
 
+    numOfPeopleGlob = int(inputEntry[0].get())
+    numOfSicks = int(inputEntry[1].get())
+    possibleStore = int(inputEntry[2].get())
+    chanceToSickStore = int(inputEntry[3].get())
+    chanceToSickTwice = int(inputEntry[4].get())
+    timeToSpot = int(inputEntry[5].get())
+    timeToHeal = int(inputEntry[6].get())
+    deathChance = float(inputEntry[7].get())
+    if inputEntry[8].get().upper() == "T":
+        ThirdChance = True
+    elif inputEntry[8].get().upper() == "F":
+        ThirdChance = False
+
     arrayOfObjects = [None] * numOfPeopleGlob
     arrayOfPeople = [None] * numOfPeopleGlob
-    arrayOfBeenSick = [False] * numOfPeopleGlob
     arrayOfChance = [None] * numOfPeopleGlob
     arrayOfNowInStore = [None] * numOfPeopleGlob
-    arrayOfDeath = [False] * numOfPeopleGlob
     arrayOfSick = [1] * numOfSicks + [0] * (numOfPeopleGlob-numOfSicks)
+    arrayOfDeath = [False] * numOfPeopleGlob
+    arrayOfBeenSick = [False] * numOfPeopleGlob
+    arrayOfThird = [False] * numOfPeopleGlob
 
     makePeople(numOfPeopleGlob)
 
