@@ -25,6 +25,8 @@ w.pack()
 w.create_rectangle(450, 450, 550, 550)
 
 sizeOfPeople = 10
+Days = 1
+dayText = "Day 1"
 
 fInfo = Frame(window, width=200, height=canvas_height)
 fInfo.pack()
@@ -37,6 +39,9 @@ arrayOfSick = [1] * numOfSicks + [0] * (numOfPeopleGlob-numOfSicks)
 arrayOfDeath = [False] * numOfPeopleGlob
 arrayOfBeenSick = [False] * numOfPeopleGlob
 arrayOfThird = [False] * numOfPeopleGlob
+
+creditLabel = Label(fInfo, text="Made By Ofek Grego").pack()
+spaceLabel = Label(fInfo,text="").pack()
 
 inputLabel = [Label(text="\n\nNumber Of People:"),Label(text="Sick People At Start:"),Label(text="Chance To Go To Store(%):")
 ,Label(text="Chance To Get Sick In Store(%):"),Label(text="Chance To Get Sick Twice(%):"),Label(text="Time To Spot Sickness:")
@@ -56,6 +61,22 @@ inputEntry[5].insert("0",timeToSpot)
 inputEntry[6].insert("0",timeToHeal)
 inputEntry[7].insert("0",deathChance)
 inputEntry[8].insert("0", "F")
+
+Labels = [Label(text="\n\n\nAlive: "),Label(text="Sicks:"),Label(text="Not Spotted:"),
+            Label(text="Death")]
+for i in Labels:
+    i.pack()
+
+def makeSeen():
+    w.create_rectangle(0, 0, 130, 50, fill="#666")
+    w.create_text(50, 25, text=dayText, font="helvetica 30")
+    w.create_rectangle(0,900,170,1000, fill="#666")
+    w.create_rectangle(10, 910, 25, 925 , fill="#0000FF")
+    w.create_text(75, 916, text="Regular Pesron", fill="white")
+    w.create_rectangle(10, 940, 25, 955 , fill="#00FF00")
+    w.create_text(87, 948, text="Not Spotted Person", fill="white")
+    w.create_rectangle(10, 970, 25, 985 , fill="#FF0000")
+    w.create_text(75, 980, text="Spotted Person", fill="white")
 
 def makePeople(numOfPeople):
         global arrayOfPeople, arrayOfObjects,isSickOne
@@ -100,8 +121,12 @@ def refrashScreen():
                     arrayOfObjects[i] = w.create_rectangle(arrayOfPeople[i][0],arrayOfPeople[i][1],arrayOfPeople[i][0]+sizeOfPeople, arrayOfPeople[i][1]+sizeOfPeople, fill="#0000FF")
 
 def refrashData():
-    global arrayOfChance
+    global arrayOfChance,dayText,Days
     sickInside = False
+    sickNumber = 0
+    noSpot = 0
+    Days += 1
+    dayText = "Day " + str(Days)
     arrayOfChance = [None] * numOfPeopleGlob
     for i in range(len(arrayOfPeople)):
         if arrayOfDeath[i] == False:
@@ -126,12 +151,15 @@ def refrashData():
         if arrayOfDeath[i] == False:
             if arrayOfSick[i] > 0:
                 arrayOfSick[i] += 1
+                sickNumber += 1
             if arrayOfSick[i] == timeToHeal+1:
                 chanceOfDeath = random.randint(1,1000)
                 if chanceOfDeath <= (deathChance*10):
                     arrayOfDeath[i] = True
                 else:
                     arrayOfSick[i] = 0
+            if 0 < arrayOfSick[i] <= timeToSpot:
+                noSpot += 1
 
     if sickInside == True:
         for j in range(len(arrayOfNowInStore)):
@@ -158,18 +186,25 @@ def refrashData():
                             arrayOfSick[j] = 1
                             arrayOfThird[j] = True
 
+        Labels[0].config(text= "\n\n\n" + "Alive: "+ str(numOfPeopleGlob-arrayOfDeath.count(True)))
+        Labels[1].config(text= "Sicks: " + str(sickNumber))
+        Labels[2].config(text= "Not Spotted: " + str(noSpot))
+        Labels[3].config(text= "Death: " + str(arrayOfDeath.count(True)))
 
 def nextPressed():
     refrashData()
+    makeSeen()
 
 def runPressed():
     global arrayOfObjects,arrayOfPeople,arrayOfChance,arrayOfNowInStore,arrayOfSick,arrayOfDeath
     global numOfPeopleGlob,numOfSicks,possibleStore,chanceToSickStore
-    global timeToHeal,timeToSpot,ThirdChance,chanceToSickTwice, arrayOfThird,arrayOfBeenSick
+    global timeToHeal,timeToSpot,ThirdChance,chanceToSickTwice, arrayOfThird,arrayOfBeenSick,Days,dayText
 
     w.delete("all")
     w.create_rectangle(450, 450, 550, 550)
 
+    Days = 1
+    dayText = "Day 1"
     numOfPeopleGlob = int(inputEntry[0].get())
     numOfSicks = int(inputEntry[1].get())
     possibleStore = int(inputEntry[2].get())
@@ -193,6 +228,7 @@ def runPressed():
     arrayOfThird = [False] * numOfPeopleGlob
 
     makePeople(numOfPeopleGlob)
+    makeSeen()
 
 nextButton = Button(fInfo,text="Next!", command=nextPressed).pack(side=tkinter.TOP)
 runButton = Button(fInfo,text="Run!", command=runPressed).pack()
