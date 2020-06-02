@@ -1,0 +1,39 @@
+Number Of People:
+number of people at the start of the simulator.
+
+Sick People At Start:
+number of sick people at the start of the simulator.
+
+Chance To Go To Store:
+the chance of each people to go to the store each day.
+
+Chance To Get Sick In Store:
+the chance to get sick when there is sick people in store.
+
+Chance To Get Sick Twice:
+the chance of each people to get sick again after he heal from the first time.
+
+Time To Spot Sickness:
+the amount of days to spot a sick people and after that he stop going to the store.
+
+Time To Heal:
+the amount of days to get heal or die from the sickness.
+
+Chance To Die:
+the chance to die after the time to heal.
+
+Chance To Get Sick Third:
+if a people can get sick third time.
+
+Days In Next:
+amount of days that are past when you hit next button.
+
+
+Run!(Button):
+start a new simulator with new variables.
+
+Next!(Button):
+get to the next day(s).
+
+Remove/Add Visuals(Button):
+remove or adding the people on the canvas, removing them make the software faster.
