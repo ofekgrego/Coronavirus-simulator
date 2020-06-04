@@ -13,33 +13,10 @@ timeToHeal = 14
 deathChance = 0.5
 ThirdChance = False
 graphRemove = False
-
-sickInside = False
-window = Tk()
-window.title("Corona Simulator")
-window.resizable(False,False) #disable resize
-labelOfGraphs = ["Deaths","Sick Now"]
-canvas_width = 1000  #x
-canvas_height = 1000 #y
-fCan = Frame(window, width=canvas_width, height=canvas_width+260)
-fCan.pack(side=tkinter.LEFT)
-w = Canvas(fCan, width=canvas_width,height=canvas_height, background="gray")
-w.pack()
-w.create_rectangle(450, 450, 550, 550)
-graphCanvas = Canvas(fCan,width=canvas_width,height=260)
-graphCanvas.pack()
-graphCanvas.create_text(70,30, text=labelOfGraphs[0], font="helvetica 20")
-graphCanvas.create_line(50,50,50,250, width=3)
-graphCanvas.create_line(50,250,500,250, width=3)
-graphCanvas.create_text(580,30, text=labelOfGraphs[1], font="helvetica 20")
-graphCanvas.create_line(550,50,550,250, width=3)
-graphCanvas.create_line(550,250,1000,250, width=3)
 sizeOfPeople = 10
 Days = 1
 dayText = "Day 1"
-
-fInfo = Frame(window, width=200, height=canvas_height)
-fInfo.pack()
+sickInside = False
 
 arrayOfObjects = [None] * numOfPeopleGlob
 arrayOfPeople = [None] * numOfPeopleGlob
@@ -52,34 +29,59 @@ arrayOfThird = [False] * numOfPeopleGlob
 arrayOfSickGraph = [0]
 arrayOfDeathGraph = [0]
 
-creditLabel = Label(fInfo, text="Made By Ofek Grego").pack()
-spaceLabel = Label(fInfo,text="").pack()
+labelOfGraphs = ["Deaths","Sick Now"]
+canvas_width = 1000  #x
+canvas_height = 1000 #y
 
-inputLabel = [Label(text="\n\nNumber Of People:"),Label(text="Sick People At Start:"),Label(text="Chance To Go To Store(%):")
-,Label(text="Chance To Get Sick In Store(%):"),Label(text="Chance To Get Sick Twice(%):"),Label(text="Time To Spot Sickness:")
-,Label(text="Time To Heal:"),Label(text="Chance To Die(%):"),Label(text="Chance To Get Sick Third(T/F):"),Label(text="\n\n\n\nDays In Next:")]
-inputEntry = [Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5)]
+if __name__ == "__main__":
 
+    window = Tk()
+    window.title("Corona Simulator")
+    window.resizable(False,False) #disable resize
+    fCan = Frame(window, width=canvas_width, height=canvas_width+260)
+    fCan.pack(side=tkinter.LEFT)
+    w = Canvas(fCan, width=canvas_width,height=canvas_height, background="gray")
+    w.pack()
+    w.create_rectangle(450, 450, 550, 550)
+    graphCanvas = Canvas(fCan,width=canvas_width,height=260)
+    graphCanvas.pack()
+    graphCanvas.create_text(70,30, text=labelOfGraphs[0], font="helvetica 20")
+    graphCanvas.create_line(50,50,50,250, width=3)
+    graphCanvas.create_line(50,250,500,250, width=3)
+    graphCanvas.create_text(580,30, text=labelOfGraphs[1], font="helvetica 20")
+    graphCanvas.create_line(550,50,550,250, width=3)
+    graphCanvas.create_line(550,250,1000,250, width=3)
 
-for i in range(len(inputLabel)):
-    inputLabel[i].pack(side=tkinter.TOP)
-    inputEntry[i].pack(side=tkinter.TOP)
+    fInfo = Frame(window, width=200, height=canvas_height)
+    fInfo.pack()
 
-inputEntry[0].insert("0",numOfPeopleGlob)
-inputEntry[1].insert("0",numOfSicks)
-inputEntry[2].insert("0",possibleStore)
-inputEntry[3].insert("0",chanceToSickStore)
-inputEntry[4].insert("0", chanceToSickTwice)
-inputEntry[5].insert("0",timeToSpot)
-inputEntry[6].insert("0",timeToHeal)
-inputEntry[7].insert("0",deathChance)
-inputEntry[8].insert("0", "F")
-inputEntry[9].insert("0", 1)
+    creditLabel = Label(fInfo, text="Made By Ofek Grego").pack()
+    spaceLabel = Label(fInfo,text="").pack()
 
-Labels = [Label(text="\n\n\nAlive: "),Label(text="Sicks:"),Label(text="Not Spotted:"),
-            Label(text="Death")]
-for i in Labels:
-    i.pack()
+    inputLabel = [Label(text="\n\nNumber Of People:"),Label(text="Sick People At Start:"),Label(text="Chance To Go To Store(%):")
+    ,Label(text="Chance To Get Sick In Store(%):"),Label(text="Chance To Get Sick Twice(%):"),Label(text="Time To Spot Sickness:")
+    ,Label(text="Time To Heal:"),Label(text="Chance To Die(%):"),Label(text="Chance To Get Sick Third(T/F):"),Label(text="\n\n\n\nDays In Next:")]
+    inputEntry = [Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5),Entry(width=5)]
+
+    for i in range(len(inputLabel)):
+        inputLabel[i].pack(side=tkinter.TOP)
+        inputEntry[i].pack(side=tkinter.TOP)
+
+    inputEntry[0].insert("0",numOfPeopleGlob)
+    inputEntry[1].insert("0",numOfSicks)
+    inputEntry[2].insert("0",possibleStore)
+    inputEntry[3].insert("0",chanceToSickStore)
+    inputEntry[4].insert("0", chanceToSickTwice)
+    inputEntry[5].insert("0",timeToSpot)
+    inputEntry[6].insert("0",timeToHeal)
+    inputEntry[7].insert("0",deathChance)
+    inputEntry[8].insert("0", "F")
+    inputEntry[9].insert("0", 1)
+
+    Labels = [Label(text="\n\n\nAlive: "),Label(text="Sicks:"),Label(text="Not Spotted:"),
+                Label(text="Death")]
+    for i in Labels:
+        i.pack()
 
 def makeSeen():
     w.create_rectangle(0, 0, 130, 50, fill="#666")
@@ -93,7 +95,6 @@ def makeSeen():
     w.create_text(75, 980, text="Spotted Person", fill="white")
 
 def makePeople(numOfPeople):
-
         global arrayOfPeople, arrayOfObjects,isSickOne
         for j in range(numOfPeople):
             xAxe = 500
@@ -241,10 +242,6 @@ def refrashData():
     Labels[3].config(text= "Death: " + str(arrayOfDeath.count(True)))
     arrayOfSickGraph.append(sickNumber)
     arrayOfDeathGraph.append(arrayOfDeath.count(True))
-
-
-
-
 def nextPressed():
     timeNext = int(inputEntry[9].get())
     for i in range(timeNext):
@@ -305,9 +302,10 @@ def removePressed():
         graphRemove = True
     refrashScreen()
 
-nextButton = Button(fInfo,text="Next!", command=nextPressed).pack(side=tkinter.TOP)
-runButton = Button(fInfo,text="Run!", command=runPressed).pack()
-removeButton = Button(fInfo,text="Remove/Add Visuals", command=removePressed).pack()
-refrashGraphs()
+if __name__ == "__main__":
+    nextButton = Button(fInfo,text="Next!", command=nextPressed).pack(side=tkinter.TOP)
+    runButton = Button(fInfo,text="Run!", command=runPressed).pack()
+    removeButton = Button(fInfo,text="Remove/Add Visuals", command=removePressed).pack()
+    refrashGraphs()
 
-window.mainloop()
+    window.mainloop()
