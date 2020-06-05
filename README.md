@@ -3,8 +3,6 @@
 
 #### There are information about the variables and buttons in "info.txt" file
 
-![Screenshot](Images/Screenshot/Shot1.png)
-
-![Screenshot](Images/Screenshot/Shot2.png)
-
-![Screenshot](Images/Screenshot/Shot3.png)
+![Screenshot](https://i.ibb.co/r2x6x7G/Shot1.png)
+![Screenshot](https://i.ibb.co/QfqkgYC/Shot2.png)
+![Screenshot](https://i.ibb.co/fHvLZtK/Shot3.png)
